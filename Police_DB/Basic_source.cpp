@@ -1,70 +1,36 @@
 
 #include <iostream>
-#include <set>
 #include <string>
 #include <conio.h>
 #include "Auxiliary.h"
-
-
-
-struct node { //узел
-	
-	std::string key;
-	std::string data;	
-		
-	// Metods
-	void print() { std::cout << this->key << "\t" << this->data << std::endl; }
-	
-	// Operators
-	bool operator<(const node& other) const
-	{
-		if ((this->key) < other.key) 
-		{return true;} else return false;
-
-	}
-	
-	//Constructors
-	node()
-	{
-		this->key ="";
-		this->data = "";
-		
-	}
-	node(std::string key, std::string data)
-	{
-		this->key = key;
-		this->data = data;		
-	}
-	//Destructor
-	~node()
-	{
-
-	}
-};
-
-
-std::ostream& operator<<(std::ostream& os,const node& n);
+#include <map>
+#include <cmath>
 
 #define POLICE
-//#define TEST
+
 int main()
 {
-	
+///////////////////////////////////////////	
 	Font(20);
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
 	setlocale(LC_ALL, "");
-
-
+//////////////////////////////////////////	
 #ifdef POLICE
-	std::set<node> S;
-	std::set<node>::iterator it;
+	std::map<std::string, std::string> my_map;
+	std::map<std::string, std::string>::iterator it;
 
-	node a("ВН 22-22", "Неправильная парковка");
-	node b("КА 33-33", "Превышение скорости");
-		
-	S.insert(a);	
-	S.insert(b);	
+	// Базовое заполнение STL map
+	my_map.insert(std::pair< std::string, std::string >("АА 11-11", "Неправильная парковка"));
+	my_map.insert(std::pair< std::string, std::string >("ББ 22-22", "Превышение скорости"));
+	my_map.insert(std::pair< std::string, std::string >("ВВ 33-33", "Неправильная высадка пасажиров"));
+	my_map.insert(std::pair< std::string, std::string >("ДД 44-44", "Запрещенный обгон"));
+	my_map.insert(std::pair< std::string, std::string >("ГГ 55-55", "Просроченый техталон"));
+	my_map.insert(std::pair< std::string, std::string >("ЕЕ 66-66", "Нет еб...й аптечки, понимаешь!!!"));
+	my_map.insert(std::pair< std::string, std::string >("ЖЖ 33-33", "Неправильная высадка пасажиров"));
+	my_map.insert(std::pair< std::string, std::string >("ЗЗ 44-44", "Запрещенный обгон"));
+	my_map.insert(std::pair< std::string, std::string >("ИИ 55-55", "Просроченый техталон"));
+	
 	
 vvod_S:
 	std::system("cls");
@@ -74,7 +40,7 @@ vvod_S:
 	std::cout << "\nESC - выход\n\n";
 
 
-	//std::cout << _getch()-48;
+	
 	switch (_getch() - 48)
 	{
 	case 0://  Добавление или обновление элемента
@@ -91,22 +57,19 @@ vvod_S:
 		std::getline(std::cin, violations);
 		W_line();
 
-		node buff;
-		for (it = S.begin(); it != S.end(); it++) // тест на совпадение
-		{
-			buff = *it;
-			if (buff.key == num)
+		
+		for (it = my_map.begin(); it != my_map.end(); it++) // тест на совпадение
+		{			
+			if (it._Ptr->_Myval.first == num)
 			{
-				S.erase(it);
-				buff.data != "" ? buff.data += (", " + violations) : buff.data += violations;
-				S.insert(buff);
+				it._Ptr->_Myval.second = "" ? it._Ptr->_Myval.second += (", " + violations) : it._Ptr->_Myval.second += violations;
+
 			    std::cout << "Данные по номерному знаку " << num << " добавлены" << std::endl;
 				system("pause");
 				goto vvod_S;
 			}			
 		}
-		node nw(num, violations);
-		S.insert(nw);
+		my_map.insert(std::pair< std::string, std::string >(num, violations));		
 		std::cout << "Создан новый узел " << num  << std::endl;
 		system("pause");
 		goto vvod_S;
@@ -117,9 +80,9 @@ vvod_S:
 		W_line();
 		std::cout << "Номер авто" << "\t|" << " Нарушения" << std::endl;
 		W_line();
-		for (it = S.begin(); it != S.end(); it++)
+		for (it = my_map.begin(); it != my_map.end(); it++)
 		{
-			std::cout << *it << std::endl;
+			std::cout << it._Ptr->_Myval.first << "\t" << it._Ptr->_Myval.second << std::endl;
 			W_line();
 		}
 		system("pause");
@@ -128,7 +91,7 @@ vvod_S:
 	case 2://  Выборочный поиск
 	{
 		std::string num;
-		
+
 		system("cls");
 		W_line();
 		std::cout << "Введите номер авто(прим. BI 32-11): ";
@@ -138,15 +101,12 @@ vvod_S:
 		std::cout << "Номер авто" << "\t|" << " Нарушения" << std::endl;
 		W_line();
 
-		node buff;
-		for (it = S.begin(); it != S.end(); it++) // тест на совпадение
-		{
-			buff = *it;
-			if (buff.key == num)
+		
+		for (it = my_map.begin(); it != my_map.end(); it++) // проверка на совпадение
+		{		
+			if (it._Ptr->_Myval.first == num)
 			{
-				buff.print();
-				std::cout << "OK";
-			
+				std::cout << it._Ptr->_Myval.first << "\t" << it._Ptr->_Myval.second << std::endl;		       	
 			}
 		}
 
@@ -168,15 +128,14 @@ vvod_S:
 		system("cls");
 		W_line();
 		std::cout << "Номер авто" << "\t|" << " Нарушения" << std::endl;
-		W_line();
-
-		node buff;
-		for (it = S.begin(); it != S.end(); it++) 
+		W_line();		
+		
+		for (it = my_map.begin(); it != my_map.end(); it++) 
 		{
-			buff = *it;
-			if ((buff.key >= num_low) & (buff.key <= num_height))
+			
+			if ((it._Ptr->_Myval.first >= num_low) & (it._Ptr->_Myval.first <= num_height))
 			{
-				buff.print();
+				std::cout << it._Ptr->_Myval.first << "\t" << it._Ptr->_Myval.second << std::endl;
 				W_line();
 			}
 		}
@@ -185,31 +144,167 @@ vvod_S:
 		system("pause");
 		goto vvod_S;
 	};
-	case 4: // 
+	case 4: // Показать дерево
 	{
+///////////////////////// NULL 
 		system("cls");
-		std::cout << "В процессе разработки" << std::endl;
-		std::cout << "PTR" << "\t\t" << "Left" << "\t\t" << "Right" << "\t\t" << "Parent" << std::endl;
-		W_line();
-		/*
-		node buff;
-		std::_Tree_node<struct node, void *> * a[5];
-		it = S.begin();
-		a[1] = it._Ptr;
 
+		std::map<std::string, std::string>::iterator null_position = my_map.begin();
 
-		std::cout << "\t"<< a[1];
-		if (it._Ptr->_Parent == S.begin()._Ptr->_Parent) 
+		for (unsigned int i = 0; i < my_map.size(); i++)
 		{
-			buff = *it;
-			std::cout << buff.key;
-		}
-*/
-		for (it = S.begin(); it != S.end(); it++)
-		{			
-			std::cout << it._Ptr << "\t" << it._Ptr->_Left << "\t" << it._Ptr->_Right << "\t" << it._Ptr->_Parent << std::endl;
+			null_position++;
 		}
 
+		W_line();
+		std::cout << null_position._Ptr << "\t - NULL"  << std::endl;
+		W_line();
+////////////////////// root node
+
+		std::map<std::string, std::string>::iterator root_position = my_map.begin();
+		for (it = my_map.begin(); it != my_map.end(); it++)
+
+		{
+			if (it._Ptr->_Parent == null_position._Ptr)
+			{
+				root_position = it;
+			}
+		}
+		std::cout << (*root_position).first << "\t" << root_position._Ptr << "\t" << " - root" << std::endl;
+		W_line();
+
+///////////// зависимости элементов STL map
+		std::cout << "Номер" << "\t\t" << "Address" << "\t\t" << "Parent" << "\t\t" << "Left" << "\t\t" << "Right" << std::endl;
+
+		W_line();
+		for (it = my_map.begin(); it != my_map.end(); it++)
+		{
+			std::cout << (*it).first << "\t" << it._Ptr << "\t" << it._Ptr->_Parent << "\t" << it._Ptr->_Left << "\t" << it._Ptr->_Right << std::endl;
+		}
+		W_line();		
+
+////////////////////////////////// Узнать глубину и ширину дерева
+		int dip_tree = 0;
+		int weight_tree;
+
+		it = root_position;
+		for (unsigned int i = 0; i < my_map.size(); i++)
+		{
+			if (it._Ptr->_Right != null_position._Ptr)
+			{
+				it._Ptr = it._Ptr->_Right;
+				dip_tree++;
+			}
+		}
+		weight_tree = pow(2, dip_tree);
+
+////////////////////////////////////////// Создание двумерного динамического массива
+		std::string** Mas = new std::string *[dip_tree + 2];
+		for (int i = 0; i < dip_tree + 2; i++)
+			Mas[i] = new std::string[weight_tree];
+
+//////////////////////////////// заполнение масива значениями
+
+		int n = 0;
+		int hor = 0;
+		int ver = 0;
+
+		Mas[0][0] = root_position._Ptr->_Myval.first;	// корневой узел 
+
+		it = root_position;
+	a:
+
+		hor = 0;
+		for (int i = 0; i < weight_tree; i++)
+		{
+			if (Mas[ver + 1][i] == "") break;
+			hor++;
+		}
+
+		if (Mas[ver + 1][hor] == "" && it._Ptr->_Right != null_position._Ptr)
+		{
+			ver++;
+			it._Ptr = it._Ptr->_Right;
+			Mas[ver][hor] = it._Ptr->_Myval.first;
+			goto a;
+		}
+		else
+		{
+		up:
+			if (it._Ptr->_Parent == null_position._Ptr) goto end;
+			ver--;
+			it._Ptr = it._Ptr->_Parent;
+			for (int i = 0; i < weight_tree; i++)
+			{
+				if (it._Ptr->_Left->_Myval.first == Mas[ver + 1][i]) goto up;
+			}
+			hor = 0;
+			for (int i = 0; i < weight_tree; i++)
+			{
+				if (Mas[ver + 1][i] == "") break;
+				hor++;
+			}
+
+			if (Mas[ver + 1][hor] == "" && it._Ptr->_Left != null_position._Ptr)
+			{
+				ver++;
+				it._Ptr = it._Ptr->_Left;
+				Mas[ver][hor] = it._Ptr->_Myval.first;
+				goto a;
+			}
+			goto up;
+		}
+
+	end:
+///////////////////////////////  Прорисовка дерева 
+		{
+			int w = 16;
+			const int centr = 16;
+			int l = 0;
+			double koef;
+			int rw;
+			int otstup;
+
+			koef = pow(2, l);
+			otstup = centr / koef;
+			rw = w;
+
+			for (int z = 0; z < w; z++)std::cout << "   ";
+			std::cout << "RED_BLACK_TREE" << std::endl << std::endl;
+
+		iter:
+
+			if (Mas[l][0] != "")
+			{
+				if (koef != 1)
+				{
+					otstup = 2 * centr / koef;
+					rw = rw + otstup / 2;
+				}
+
+				w = rw;
+				for (int j = 0; j < 10; j++)
+				{
+					for (int z = 0; z < w; z++)std::cout << "   ";
+
+					if (Mas[l][j] == "")
+					{
+						l++;
+						koef = pow(2, l);
+						break;
+					}
+					else
+					{
+						std::cout << Mas[l][j];
+						std::cout << "\r";
+						w -= otstup;
+					}
+				}
+				std::cout << std::endl << std::endl << std::endl;
+				goto iter;
+			}
+			delete[] Mas;
+		}
 
 		system("pause");
 		goto vvod_S;
@@ -225,67 +320,15 @@ vvod_S:
 		std::system("pause");
 		std::system("cls");
 		goto vvod_S;
-
 	};
 	
 	}
-	//End();
-	//system("pause");
+	
 #endif // POLICE
-
-#ifdef TEST
-	W_line();
-	std::set<int> S = {1,2,3};
-	std::set<int>::iterator it, it2;
-	
-	//std::string root = "";
-
-
-	//node a("BI 47-42", "Неправильная парковка");
-	//node b("BI 43-55", "Превышение скорости");
-
-	//if (!S.size()) root = a.key;
-	//S.insert(24);
-	//if (!S.size()) root = b.key;
-	//
-	for (it = S.begin(); it != S.end(); it++)
-	{
-		std::cout << it._Ptr << "\t" << *it << std::endl;
-	}
-	//std::string = it._Ptr;
-	S.insert(4);
-	W_line();
-	std::cout << "PTR" << "\t\t" << "Left" << "\t\t" << "Right" << "\t\t" << "Parent" << std::endl;
-	
-	for (it = S.begin(); it != S.end(); it++)
-	{		
-		std::cout <<  std::endl;
-	}
-	
-	for (it = S.begin(); it != S.end(); it++)
-	{
-		std::cout << it._Ptr << "\t" << it._Ptr->_Left << "\t" << it._Ptr->_Right << "\t"<< it._Ptr->_Parent << std::endl;
-	}
-
-	it = S.end();
-	std::cout << it._Ptr;
-	//std::cout << it._Ptr->_Isnil;
-	
-	//it = S.find(a);
-
-#endif // TEST
-
-
+	   
 	return 0;
 }
 
 
 //Functions defenitions
 
-
-
-std::ostream& operator<<(std::ostream& os, const node& n)
-{
-	os << n.key << "\t|"<< n.data;
-	return os;
-}
